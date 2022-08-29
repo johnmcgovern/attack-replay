@@ -7,6 +7,7 @@
 from genericpath import exists
 from os import walk
 
+import json
 import requests
 import sys
 import time
@@ -51,9 +52,9 @@ for file_name in f:
     if debug:
         print("File Key:", file_key)
 
-    if file_to_sourcetype_lookup[file_key] is not None:
-        if debug:
-            print("Sourcetype Match:", file_to_sourcetype_lookup[file_key])
+    if file_key in file_to_sourcetype_lookup.keys() is not None:
+
+        print("Sourcetype Match:", file_to_sourcetype_lookup[file_key])
 
     else:
         print("Sourcetype match not found in file_to_sourcetype_lookup")
@@ -69,14 +70,24 @@ for file_name in f:
     print("Writing", data_file_path, "to", splunk_index, "(", data_file_length, "lines )" )
 
     while current_line <= data_file_length:
+        
         current_event = get_line(data_file_path, current_line)
+
+        # If we have a entry in the source lookup then use that for source
+        # Otherwise defautl to file name
+        sourcetype = file_to_sourcetype_lookup[file_key]
+        
+        if file_key in file_to_source_lookup.keys():
+            source = file_to_source_lookup[file_key]
+        else:
+            source = file_name
 
         event_json = {
             "time": time.time(), 
             "index": splunk_index, 
             "host": splunk_host,
             "source": file_name, 
-            "sourcetype":file_to_sourcetype_lookup[file_key],  
+            "sourcetype": sourcetype,  
             "event": current_event }        
 
         # Group events together for sending as a batch
@@ -89,7 +100,7 @@ for file_name in f:
         
         current_line += 1
 
-    # Clear out event storage after while is done to catch remaining events
+    # Send remaining events in event_json_storage to HEC after the while loop concludes
     r = session.post(splunk_url, headers=splunk_auth_header, data=event_json_storage, verify=False)
     event_json_storage = ""
 
