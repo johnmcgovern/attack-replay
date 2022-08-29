@@ -18,7 +18,7 @@ from lookup import *
 
 
 try:
-    print("Replaying attack day for TTP ID:", sys.argv[1])
+    print("\nReplaying attack data for TTP ID:", sys.argv[1])
 except: 
     print("No TTP ID specified as a CLI argument (i.e. main.py T1059.001). Exiting")
     exit()
@@ -31,6 +31,8 @@ for (dirpath, dirnames, filenames) in walk(log_directory_path):
     f.extend(filenames)
     break
 
+f.remove(".DS_Store")
+
 if len(f)> 0:
     print("Found these files:", f)
 else: 
@@ -39,6 +41,7 @@ else:
 
 # Open a persistent tcp session to Splunk HEC 
 session = requests.session()
+print("\n-----")
 
 for file_name in f:
     if debug:
@@ -50,7 +53,7 @@ for file_name in f:
 
     if file_to_sourcetype_lookup[file_key] is not None:
         if debug:
-            print("Match Found:", file_to_sourcetype_lookup[file_key])
+            print("Sourcetype Match:", file_to_sourcetype_lookup[file_key])
 
     else:
         print("Sourcetype match not found in file_to_sourcetype_lookup")
@@ -84,13 +87,13 @@ for file_name in f:
             r = session.post(splunk_url, headers=splunk_auth_header, data=event_json_storage, verify=False)
             event_json_storage = ""
         
-        print("Current line:", current_line)
         current_line += 1
 
     # Clear out event storage after while is done to catch remaining events
     r = session.post(splunk_url, headers=splunk_auth_header, data=event_json_storage, verify=False)
     event_json_storage = ""
 
-    print("Done with", data_file_path, "to", splunk_index, "(", data_file_length, "lines )" )
+    print("Done with", data_file_path, "to", splunk_index, "index (", data_file_length, "lines )" )
+    print("-----\n")
 
 session.close()

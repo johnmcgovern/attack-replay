@@ -2,7 +2,6 @@
 # file.py - File and filesystem type operations.
 #
 
-import json
 import linecache
 
 def get_data_file_length(data_file_path):
