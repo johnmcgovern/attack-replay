@@ -19,3 +19,4 @@ Notes:
 
 - To add a sourcetype or source mapping, update the dictionaries in lookup.py.
 - Host inference feature coming (hopefully) someday. Right now host is static.
+- Copy config-sample.py to config.py and modify as needed.
