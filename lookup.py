@@ -8,7 +8,8 @@ file_to_sourcetype_lookup = {
     "downloadfile_windows-security": "WinEventLog:Security",
     "windows-powershell": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
     "windows-security": "WinEventLog:Security",
-    "windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
+    "windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-system": "WinEventLog:System"
 }
 
 # File key to source mapping (optional)

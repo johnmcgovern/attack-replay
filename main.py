@@ -17,6 +17,10 @@ from file import *
 from lookup import *
 
 
+# Path Logic
+# Real: ./data/T1059.001/atomic_red_team/windows-security.log
+# Variables: ./data_home_path/ttp_id/data_source_id/file_list[]
+
 # TTP ID (argv[1])
 # Bring in the TTP ID from arguments
 try:
