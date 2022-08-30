@@ -19,7 +19,7 @@ file_to_sourcetype_lookup = {
     "aws_iam_accessdenied_discovery_events": "aws:cloudtrail",
     "aws_iam_assume_role_policy_brute_force": "aws:cloudtrail",
     "aws_iam_excessive_list_command_usage": "aws:cloudtrail",
-    "sysmon_linux.log": "Syslog:Linux-Sysmon/Operational",
+    "sysmon_linux": "Syslog:Linux-Sysmon/Operational",
     "windows-sysmon2": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
     "stream_dns": "stream:dns",
     "stream_events_zeek": "bro:dns:json",
@@ -42,7 +42,36 @@ file_to_sourcetype_lookup = {
     "aws_cloudtrail_events": "aws:cloudtrail",
     "o365_bypass_mfa_via_trusted_ip": "o365:management:activity",
     "powershell": "WinEventLog:Microsoft-Windows-PowerShell/Operational"
-    
+    "krbrelayup": "WinEventLog:Security",
+    "get-aduser-powershell": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "windows-powershell-xml": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operationalml",
+    "getdomainuser-powershell": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "windows-powershell_kerberos": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "windows-sysmon_setspn": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "cisco_ios": "cisco:ios",
+    "o365_disable_mfa": "o365:management:activity",
+    "o365_sso_logon_errors": "o365:management:activity",
+    "iso_windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "logAllMimikatzModules": "WinEventLog:Security",
+    "circle_ci_disable_security_job": "circleci",
+    "circle_ci_disable_security_step": "circleci",
+    "linux_secure": "linux_secure",
+    "ptt_pth_kerb_ntlm_anon_dest_dataset": "WinEventLog:Security",
+    "ptt_pth_kerb_ntlm_anon_DC_dataset": "WinEventLog:Security",
+    "linuxrisk": "stash",
+    "windows-sysmon-registry": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "sysmon_print": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "mimikatz-windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-printservice_admin": "WinEventLog:Microsoft-Windows-PrintService/Admin",
+    "windows-printservice_operational": "WinEventLog:Microsoft-Windows-PrintService/Operational",
+    "t1547001-runonce": "WinEventLog:Security",
+    "windows-security-xml": "XmlWinEventLog",
+    "mofcomp": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "widows-security": "WinEventLog:Security",
+    "security": "WinEventLog:Security",
+    "aws_security_scanner": "aws:cloudtrail",
+    "kubernetes_kube_hunter": "kube:objects:events"
+  
 }
 
 # File key to source mapping (optional)
