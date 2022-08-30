@@ -9,5 +9,7 @@ file_to_sourcetype_lookup = {
 }
 
 file_to_source_lookup = {
+    "windows-powershell": "WinEventLog:Microsoft-Windows-Powershell/Operational",
     "windows-security": "WinEventLog:Security",
+    "windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
 }

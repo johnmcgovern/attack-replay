@@ -4,7 +4,6 @@
 # main.py - Main execution logic.
 #
 
-from genericpath import exists
 from os import walk
 
 import json
@@ -27,39 +26,44 @@ except:
 log_directory_path = data_file_location + sys.argv[1] + "/"
 print("Log Directory Path:", log_directory_path)
 
-f = []
+file_list = []
 for (dirpath, dirnames, filenames) in walk(log_directory_path):
-    f.extend(filenames)
+    file_list.extend(filenames)
     break
 
-f.remove(".DS_Store")
+file_list.remove(".DS_Store")
 
-if len(f)> 0:
-    print("Found these files:", f)
+if len(file_list)> 0:
+    print("Found these files:", file_list)
 else: 
     print("No log files found in path")
     exit()
 
 # Open a persistent tcp session to Splunk HEC 
 session = requests.session()
-print("\n-----")
 
-for file_name in f:
-    if debug:
-        print("File Name:", file_name)
+# For each file in the file list
+for file_name in file_list:
+    print("\n-----")
+    print("File Name:", file_name)
 
-    file_key = file_name.rstrip(".log")
-    if debug:
-        print("File Key:", file_key)
+    file_key = file_name.replace(".log", "")
+    print("File Key:", file_key)
 
     if file_key in file_to_sourcetype_lookup.keys() is not None:
-
         print("Sourcetype Match:", file_to_sourcetype_lookup[file_key])
-
     else:
         print("Sourcetype match not found in file_to_sourcetype_lookup")
         exit()
 
+    # If we have a entry in the source lookup then use that for source
+    # Otherwise defautl to file name
+    sourcetype = file_to_sourcetype_lookup[file_key]
+
+    if file_key in file_to_source_lookup.keys():
+        source = file_to_source_lookup[file_key]
+    else:
+        source = file_name
 
     data_file_path = log_directory_path + file_name
     data_file_length = get_data_file_length(data_file_path)
@@ -69,24 +73,16 @@ for file_name in f:
 
     print("Writing", data_file_path, "to", splunk_index, "(", data_file_length, "lines )" )
 
+    # For each line in the current file
     while current_line <= data_file_length:
         
         current_event = get_line(data_file_path, current_line)
-
-        # If we have a entry in the source lookup then use that for source
-        # Otherwise defautl to file name
-        sourcetype = file_to_sourcetype_lookup[file_key]
-        
-        if file_key in file_to_source_lookup.keys():
-            source = file_to_source_lookup[file_key]
-        else:
-            source = file_name
 
         event_json = {
             "time": time.time(), 
             "index": splunk_index, 
             "host": splunk_host,
-            "source": file_name, 
+            "source": source, 
             "sourcetype": sourcetype,  
             "event": current_event }        
 
@@ -105,6 +101,6 @@ for file_name in f:
     event_json_storage = ""
 
     print("Done with", data_file_path, "to", splunk_index, "index (", data_file_length, "lines )" )
-    print("-----\n")
+    print("-----")
 
 session.close()
