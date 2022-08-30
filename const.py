@@ -8,6 +8,6 @@ from config import *
 
 splunk_auth_header = {'Authorization': 'Splunk {}'.format(splunk_hec_token)}
 
-data_file_location = "data/"
+data_home_path = "data/"
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
