@@ -134,7 +134,7 @@ for file_name in file_list:
 
             # Mod the currentLine to send as a batch per the eventsPerHecBatch factor
             if current_line % events_per_hec_batch == 0:                        
-                r = session.post(splunk_url, headers=splunk_auth_header, data=event_json_storage, verify=False)
+                r = session.post(splunk_url + splunk_hec_event_endpoint, headers=splunk_auth_header, data=event_json_storage, verify=False)
                 event_json_storage = ""
             
             current_line += 1
