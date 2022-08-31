@@ -172,7 +172,20 @@ file_to_sourcetype_lookup = {
     "streamreader": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
     "win32process": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
     "msra-windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
-    "raw-msra-windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
+    "raw-msra-windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "Cobalt_spawnto": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-sysmon_dllhost": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-sysmon_searchprotocolhost": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "sd_delete_windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-taskschedule_xml": "XmlWinEventLog:Microsoft-Windows-TaskScheduler/Operational",
+    "windows-taskschedule": "WinEventLog:Microsoft-Windows-TaskScheduler/Operational",
+    "sysmon_linux_cron_append": "Syslog:Linux-Sysmon/Operational",
+    "stream_http_events": "stream:http",
+    "ssl_splunk": "stream:tcp",
+    "dotnet_lolbin-windows-security": "WinEventLog:Security",
+    "attack_data": "WinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "aurora-edr": "aurora-edr",
+    "firewall-powershell": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational"
     
     
 }
