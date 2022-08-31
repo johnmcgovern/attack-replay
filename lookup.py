@@ -71,7 +71,10 @@ file_to_sourcetype_lookup = {
     "security": "WinEventLog:Security",
     "aws_security_scanner": "aws:cloudtrail",
     "kubernetes_kube_hunter": "kube:objects:events"
-  
+    "container_implant_1": "aws:cloudtrail",
+    "container_implant_2": "aws:cloudtrail",
+    "windows-sysmon_proxylogon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-sysmon_umservices": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
 }
 
 # File key to source mapping (optional)
