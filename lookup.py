@@ -1,5 +1,5 @@
 #
-# file.py - Lookup dictionaries
+# lookup.py - Lookup dictionaries
 #
 
 # File key to sourcetype mapping
