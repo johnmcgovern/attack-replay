@@ -12,4 +12,4 @@ splunk_host = "attack-host"
 
 debug = True
 
-events_per_hec_batch = 200
+events_per_hec_batch = 50

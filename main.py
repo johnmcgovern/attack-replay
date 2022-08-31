@@ -109,6 +109,14 @@ for file_name in file_list:
         else:
             source = file_name
 
+        # Handle sourcetypes that are multiline and need the raw HEC endpoint
+        splunk_hec_mode = "event"
+        if sourcetype.startswith("WinEventLog"):
+            splunk_hec_mode = "raw"
+            print("Splunk HEC Endpoint:", splunk_url + splunk_hec_raw_endpoint)
+        else: 
+            print("Splunk HEC Endpoint:", splunk_url + splunk_hec_event_endpoint)
+
         data_file_path = data_source_path + file_name
         data_file_length = get_data_file_length(data_file_path)
         current_line = 1
@@ -117,34 +125,47 @@ for file_name in file_list:
 
         print("Writing", data_file_path, "to", splunk_index, "(", data_file_length, "lines )" )
 
-        # For each line in the current file
-        while current_line <= data_file_length:
-            
-            current_event = get_line(data_file_path, current_line)
+        # HEC: "services/collector/event" endpoint
+        if splunk_hec_mode == "event":
+            # For each line in the current file
+            while current_line <= data_file_length:
+                
+                current_event = get_line(data_file_path, current_line)
 
-            event_json = {
-                "time": time.time(), 
-                "index": splunk_index, 
-                "host": splunk_host,
-                "source": source, 
-                "sourcetype": sourcetype,  
-                "event": current_event }        
+                event_json = {
+                    "time": time.time(), 
+                    "index": splunk_index, 
+                    "host": splunk_host,
+                    "source": source, 
+                    "sourcetype": sourcetype,  
+                    "event": current_event 
+                    }        
 
-            # Group events together for sending as a batch
-            event_json_storage += json.dumps(event_json) + "\r\n"
+                # Group events together for sending as a batch
+                event_json_storage += json.dumps(event_json) + "\r\n"
 
-            # Mod the currentLine to send as a batch per the eventsPerHecBatch factor
-            if current_line % events_per_hec_batch == 0:                        
+                # Mod the currentLine to send as a batch per the eventsPerHecBatch factor
                 r = session.post(splunk_url + splunk_hec_event_endpoint, headers=splunk_auth_header, data=event_json_storage, verify=False)
                 event_json_storage = ""
-            
-            current_line += 1
+                
+                current_line += 1
 
-        # Send remaining events in event_json_storage to HEC after the while loop concludes
-        r = session.post(splunk_url, headers=splunk_auth_header, data=event_json_storage, verify=False)
-        event_json_storage = ""
+            # Send remaining events in event_json_storage to HEC after the while loop concludes
+            r = session.post(splunk_url + splunk_hec_event_endpoint, headers=splunk_auth_header, data=event_json_storage, verify=False)
+            event_json_storage = ""
+
+        # HEC: "services/collector/raw" endpoint
+        if splunk_hec_mode == "raw":
+            # For each line in the current file
+            while current_line <= data_file_length:
+
+                current_event = get_line(data_file_path, current_line)
+                r = session.post(splunk_url + splunk_hec_raw_endpoint, headers=splunk_auth_header, data=current_event, verify=False)
+
+                current_line += 1
 
         print("Done with", data_file_path, "to", splunk_index, "index (", data_file_length, "lines )" )
         print("-----")
 
+# Close the persistent tcp session to Splunk HEC 
 session.close()
