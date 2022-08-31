@@ -68,8 +68,9 @@ for (dirpath, dirnames, filenames) in walk(data_source_path):
     file_list.extend(filenames)
     break
 
-# File list cleanup (remove .yml and .DS_Store)
+# File list cleanup (remove .yml, .txt, and .DS_Store)
 file_list = [ item for item in file_list if not ".yml" in item ]
+file_list = [ item for item in file_list if not ".txt" in item ]
 ds_store_string = ".DS_Store"
 if ds_store_string in file_list:
     file_list.remove(ds_store_string)
