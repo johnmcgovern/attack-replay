@@ -186,6 +186,16 @@ file_to_sourcetype_lookup = {
     "attack_data": "WinEventLog:Microsoft-Windows-Sysmon/Operational",
     "aurora-edr": "aurora-edr",
     "firewall-powershell": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational"
+    "logFgdump": "WinEventLog:Security",
+    "logLazagneCredDump": "WinEventLog:Security",
+    "logLiveKDFullKernelDump": "WinEventLog:Security",
+    "logPowerShellModule": "WinEventLog:Security",
+    "windows-directory_service": "WinEventLog",
+    "zeek-dce_rpc": "bro:dce_rpc:json",
+    "windows-sec-events": "WinEventLog:Security",
+    "attack-range-windows-domain-controller": "WinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "copy-powershell": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "windows-sysmon_creddump": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
     
     
 }
