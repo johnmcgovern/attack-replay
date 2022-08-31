@@ -74,7 +74,31 @@ file_to_sourcetype_lookup = {
     "container_implant_1": "aws:cloudtrail",
     "container_implant_2": "aws:cloudtrail",
     "windows-sysmon_proxylogon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
-    "windows-sysmon_umservices": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
+    "windows-sysmon_umservices": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "splunk_zip_bomb_vulnerability": "splunkd",
+    "shadow-powershell": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "windows-security-2": "WinEventLog:Security",
+    "windows-security_bcdedit_wbadmin": "WinEventLog:Security",
+    "logAllDSInternalsModules": "WinEventLog:Security",
+    "deny": "WinEventLog:Security",
+    "all_icalc": "WinEventLog:Security",
+    "lolbinrisk": "stash",
+    "ordinal_windows-sysmon": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-sysmon-odbc-regsvr": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-sysmon-odbc-rsp": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "msiexec_moved": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "windows-sysmon_installutil_path": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "audittrail": "audittrail",
+    "kubernetes_nginx_lfi_attack": "kube:container:controller",
+    "kubernetes_nginx_rfi_attack": "kube:container:controller",
+    "zeek-dce_rpc": "bro:dce_rpc:json",
+    "aws_ecr_container_upload": "aws:cloudtrail",
+    "aws_ecr_scanning_findings_events": "aws:cloudtrail",
+    "github_push_master": "aws:firehose:json",
+    "github_push_develop": "aws:firehose:json",
+    "T1197_windows-security": "WinEventLog:Security",
+    "bits-windows-security": "WinEventLog:Security",
+    "crowdstrike_falcon": "crowdstrike:events:sensor"
 }
 
 # File key to source mapping (optional)
