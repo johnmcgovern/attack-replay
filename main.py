@@ -4,12 +4,14 @@
 # main.py - Main execution logic.
 #
 
-from os import walk
 
 import json
+import os
 import requests
 import sys
 import time
+
+from os import walk
 
 from config import *
 from const import *
@@ -17,68 +19,35 @@ from file import *
 from lookup import *
 
 
-# Path Logic
-# Real: ./data/T1059.001/atomic_red_team/windows-security.log
-# Variables: ./data_home_path/ttp_id/data_source_id/file_list[]
-
-# TTP ID (argv[1])
-# Bring in the TTP ID from arguments
+# Get file base path in arguments
 try:
-    ttp_id = sys.argv[1]
+    base_path = sys.argv[1]
     print("\nTTP ID:", sys.argv[1])
 except: 
-    print("No TTP ID specified as a CLI argument (i.e. main.py T1059.001). Exiting")
+    print("No base file path specificed. Exiting")
     exit()
 
-# Find all of the data sample types in the TTP ID path
-# i.e. ./data/T1059.001/<data_types>/filename.log
-ttp_id_path = data_home_path + ttp_id + "/"
-data_source_list = []
-for (dirpath, dirnames, filenames) in walk(ttp_id_path):
-    data_source_list.extend(dirnames)
-    break
-data_source_list.sort()
-print("TTP Path:", ttp_id_path)
+base_path = "data/T1059.001/"
+print("")
 
-
-# Data Source ID (argv[1])
-# Check that the data source has been passed in as the second argument
-try: 
-    if sys.argv[2] is not None: 
-        data_source_id = sys.argv[2]
-        print("Data Source ID:", sys.argv[2])
-
-# Exit with helpful info if a data source was not passed in
-except:
-    print("\nNo data source was passed via arguments.")
-    print("Please choose an option below:")
-    print("./data/" + ttp_id + "/<data_source>/file.log\n")
-    for item in data_source_list:
-        print(item)
-    print()
-    exit()
-
-data_source_path = ttp_id_path + data_source_id + "/"
-print("Data Source Path:", data_source_path)
-
-
-# Given the full path, generate a list of file names
+# Make an alphabetical list of all files in the base directory
 file_list = []
-for (dirpath, dirnames, filenames) in walk(data_source_path):
-    file_list.extend(filenames)
-    break
+for (dirpath, dirnames, filenames) in walk(base_path):
+    file_list += [os.path.join(dirpath, file) for file in filenames]
+file_list.sort()
 
 # File list cleanup (remove .yml, .txt, and .DS_Store)
 file_list = [ item for item in file_list if not ".yml" in item ]
 file_list = [ item for item in file_list if not ".txt" in item ]
-ds_store_string = ".DS_Store"
-if ds_store_string in file_list:
-    file_list.remove(ds_store_string)
+file_list = [ item for item in file_list if not ".DS_Store" in item ]
+
+
+print("File List:")
+for item in file_list:
+    print(item)
 
 # Check that we have at least one item remaining in the file list
-if len(file_list)> 0:
-    print("Found these files:", file_list)
-else: 
+if len(file_list) == 0:
     print("No log files found in path")
     exit()
 
@@ -86,8 +55,12 @@ else:
 session = requests.session()
 
 # For each file in the file list
-for file_name in file_list:
+for file_path in file_list:
+
     print("\n-----")
+    print("File Path:", file_path)
+
+    file_name = os.path.basename(file_path)
     print("File Name:", file_name)
 
     file_key = file_name.replace(".log", "")
@@ -117,20 +90,19 @@ for file_name in file_list:
         else: 
             print("Splunk HEC Endpoint:", splunk_url + splunk_hec_event_endpoint)
 
-        data_file_path = data_source_path + file_name
-        data_file_length = get_data_file_length(data_file_path)
+        data_file_length = get_data_file_length(file_path)
         current_line = 1
         event_json_storage = ""
 
 
-        print("Writing", data_file_path, "to", splunk_index, "(", data_file_length, "lines )" )
+        print("Writing", file_path, "to", splunk_index, "(", data_file_length, "lines )" )
 
         # HEC: "services/collector/event" endpoint
         if splunk_hec_mode == "event":
             # For each line in the current file
             while current_line <= data_file_length:
                 
-                current_event = get_line(data_file_path, current_line)
+                current_event = get_line(file_path, current_line)
 
                 event_json = {
                     "time": time.time(), 
@@ -159,13 +131,14 @@ for file_name in file_list:
             # For each line in the current file
             while current_line <= data_file_length:
 
-                current_event = get_line(data_file_path, current_line)
+                current_event = get_line(file_path, current_line)
                 r = session.post(splunk_url + splunk_hec_raw_endpoint, headers=splunk_auth_header, data=current_event, verify=False)
 
                 current_line += 1
 
-        print("Done with", data_file_path, "to", splunk_index, "index (", data_file_length, "lines )" )
+        print("Done with", file_path, "to", splunk_index, "index (", data_file_length, "lines )" )
         print("-----")
+
 
 # Close the persistent tcp session to Splunk HEC 
 session.close()
