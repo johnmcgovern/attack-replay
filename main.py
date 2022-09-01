@@ -117,8 +117,9 @@ for file_path in file_list:
                 event_json_storage += json.dumps(event_json) + "\r\n"
 
                 # Mod the currentLine to send as a batch per the eventsPerHecBatch factor
-                r = session.post(splunk_url + splunk_hec_event_endpoint, headers=splunk_auth_header, data=event_json_storage, verify=False)
-                event_json_storage = ""
+                if current_line % events_per_hec_batch == 0:
+                    r = session.post(splunk_url + splunk_hec_event_endpoint, headers=splunk_auth_header, data=event_json_storage, verify=False)
+                    event_json_storage = ""
                 
                 current_line += 1
 
@@ -128,11 +129,13 @@ for file_path in file_list:
 
         # HEC: "services/collector/raw" endpoint
         if splunk_hec_mode == "raw":
+            print("Skipping WinEventLog sourcetypes for now.")
+
             # For each line in the current file
             while current_line <= data_file_length:
 
                 current_event = get_line(file_path, current_line)
-                r = session.post(splunk_url + splunk_hec_raw_endpoint, headers=splunk_auth_header, data=current_event, verify=False)
+                # r = session.post(splunk_url + splunk_hec_raw_endpoint, headers=splunk_auth_header, data=current_event, verify=False)
 
                 current_line += 1
 
