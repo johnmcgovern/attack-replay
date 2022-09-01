@@ -22,13 +22,13 @@ from lookup import *
 # Get file base path in arguments
 try:
     base_path = sys.argv[1]
-    print("\nTTP ID:", sys.argv[1])
+    print("\nBase Path:", sys.argv[1])
 except: 
     print("No base file path specificed. Exiting")
     exit()
 
-base_path = "data/T1059.001/"
 print("")
+
 
 # Make an alphabetical list of all files in the base directory
 file_list = []
@@ -52,6 +52,7 @@ if len(file_list) == 0:
     exit()
 
 # Open a persistent tcp session to Splunk HEC 
+time.sleep(5)
 session = requests.session()
 
 # For each file in the file list
