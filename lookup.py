@@ -194,7 +194,7 @@ file_to_sourcetype_lookup = {
     "windows-system": "WinEventLog:System",
     "windows-taskschedule": "WinEventLog:Microsoft-Windows-TaskScheduler/Operational",
     "windows-taskschedule_xml": "XmlWinEventLog:Microsoft-Windows-TaskScheduler/Operational",
-    "zeek-dce_rpc": "bro:dce_rpc:json",
+    "zeek-dce_rpc": "bro:dce_rpc:json"
 }
 
 # File key to source mapping (optional)
