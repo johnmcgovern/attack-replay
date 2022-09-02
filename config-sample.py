@@ -9,6 +9,6 @@ splunk_index = "test"   # Currently we always override the data files index spec
 splunk_host = "attack-host"
 
 
-debug = True
+debug = False
 
-events_per_hec_batch = 50
+events_per_hec_batch = 100
