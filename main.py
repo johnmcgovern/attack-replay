@@ -24,7 +24,7 @@ try:
     base_path = sys.argv[1]
     print("\nBase Path:", sys.argv[1])
 except: 
-    print("No base file path specificed. Exiting")
+    print("No base file path specified. Exiting")
     exit()
 
 print("")
@@ -51,9 +51,10 @@ if len(file_list) == 0:
     print("No log files found in path")
     exit()
 
+time.sleep(5)
+
 
 # Open a persistent tcp session to Splunk HEC 
-time.sleep(5)
 session = requests.session()
 
 # For each file in the file list
@@ -137,6 +138,7 @@ for file_path in file_list:
             while current_line <= data_file_length:
 
                 current_event = get_line(file_path, current_line)
+                # Disabled until we can fix multiline
                 # r = session.post(splunk_url + splunk_hec_raw_endpoint, headers=splunk_auth_header, data=current_event, verify=False)
 
                 current_line += 1
