@@ -38,9 +38,9 @@ file_list.sort()
 
 # File list cleanup (remove .yml, .txt, and .DS_Store)
 file_list = [ item for item in file_list if not ".yml" in item ]
+file_list = [ item for item in file_list if not ".yaml" in item ]
 file_list = [ item for item in file_list if not ".txt" in item ]
 file_list = [ item for item in file_list if not ".DS_Store" in item ]
-
 
 print("File List:")
 for item in file_list:
@@ -50,6 +50,7 @@ for item in file_list:
 if len(file_list) == 0:
     print("No log files found in path")
     exit()
+
 
 # Open a persistent tcp session to Splunk HEC 
 time.sleep(5)
@@ -64,7 +65,7 @@ for file_path in file_list:
     file_name = os.path.basename(file_path)
     print("File Name:", file_name)
 
-    file_key = file_name.replace(".log", "")
+    file_key = os.path.splitext(file_name)[0]
     print("File Key:", file_key)
 
     # If we don't have a file key to sourcetype match, wait for the next item
