@@ -21,7 +21,7 @@ from lookup import *
 
 # Get file base path in arguments
 try:
-    base_path = sys.argv[1]
+    base_path = data_home_path + sys.argv[1]
     print("\nBase Path:", sys.argv[1])
 except: 
     print("No base file path specified. Exiting")
