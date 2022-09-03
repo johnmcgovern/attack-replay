@@ -21,8 +21,10 @@ from lookup import *
 
 # Get file base path in arguments
 try:
-    base_path = data_home_path + sys.argv[1]
-    print("\nBase Path:", sys.argv[1])
+    data_path = data_home_path + sys.argv[1]
+    absolute_path = os.path.dirname(__file__)
+    print("\nBase Path:", data_path)
+    print("Absolute Path:", absolute_path + data_path)
 except: 
     print("No base file path specified. Exiting")
     exit()
@@ -32,7 +34,7 @@ print("")
 
 # Make an alphabetical list of all files in the base directory
 file_list = []
-for (dirpath, dirnames, filenames) in walk(base_path):
+for (dirpath, dirnames, filenames) in walk(absolute_path + "/" + data_path):
     file_list += [os.path.join(dirpath, file) for file in filenames]
 file_list.sort()
 
@@ -42,8 +44,10 @@ file_list = [ item for item in file_list if not ".yaml" in item ]
 file_list = [ item for item in file_list if not ".txt" in item ]
 file_list = [ item for item in file_list if not ".DS_Store" in item ]
 
+# Print out the final file list to the console
 print("File List:")
 for item in file_list:
+    item = item.replace(absolute_path + "/", "")
     print(item)
 
 # Check that we have at least one item remaining in the file list
